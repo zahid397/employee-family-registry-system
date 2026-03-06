@@ -21,6 +21,7 @@ namespace EmployeeRegistry.API.Controllers
             _pdfService = pdfService;
         }
 
+        // 🔍 Search employees
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] string q)
         {
@@ -28,6 +29,7 @@ namespace EmployeeRegistry.API.Controllers
             return Ok(employees);
         }
 
+        // ➕ Create employee
         [HttpPost]
         public async Task<IActionResult> Create(CreateEmployeeCommand command)
         {
@@ -66,6 +68,7 @@ namespace EmployeeRegistry.API.Controllers
             return Ok(employee.Id);
         }
 
+        // ❌ Delete employee
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -73,6 +76,7 @@ namespace EmployeeRegistry.API.Controllers
             return NoContent();
         }
 
+        // 📄 Single employee PDF
         [HttpGet("{id}/pdf")]
         public async Task<IActionResult> GetPdf(Guid id)
         {
@@ -82,6 +86,21 @@ namespace EmployeeRegistry.API.Controllers
                 return NotFound();
 
             return File(pdfBytes, "application/pdf", $"employee_{id}.pdf");
+        }
+
+        // 📊 Employee List PDF (NEW FEATURE)
+        [HttpGet("pdf-list")]
+        public async Task<IActionResult> GetPdfList([FromQuery] string q = null)
+        {
+            var employees = await _repository.SearchAsync(q);
+
+            var pdfBytes = await _pdfService.GenerateEmployeeListPdfAsync(employees);
+
+            return File(
+                pdfBytes,
+                "application/pdf",
+                $"employee_list_{DateTime.Now:yyyyMMddHHmm}.pdf"
+            );
         }
     }
 }
