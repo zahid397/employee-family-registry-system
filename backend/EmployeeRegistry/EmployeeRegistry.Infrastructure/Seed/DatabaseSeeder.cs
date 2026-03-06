@@ -32,8 +32,8 @@ namespace EmployeeRegistry.Infrastructure.Seed
                     },
                     Children = new List<Child>
                     {
-                        new Child { Id = Guid.NewGuid(), Name = "Rafi", DateOfBirth = new DateTime(2015, 5, 10) },
-                        new Child { Id = Guid.NewGuid(), Name = "Rima", DateOfBirth = new DateTime(2018, 8, 22) }
+                        new Child { Id = Guid.NewGuid(), Name = "Rafi", DateOfBirth = DateTime.SpecifyKind(new DateTime(2015,5,10), DateTimeKind.Utc) },
+                        new Child { Id = Guid.NewGuid(), Name = "Rima", DateOfBirth = DateTime.SpecifyKind(new DateTime(2018,8,22), DateTimeKind.Utc) }
                     }
                 },
                 new Employee
@@ -63,7 +63,7 @@ namespace EmployeeRegistry.Infrastructure.Seed
                     },
                     Children = new List<Child>
                     {
-                        new Child { Id = Guid.NewGuid(), Name = "Tanisha", DateOfBirth = new DateTime(2019, 2, 14) }
+                        new Child { Id = Guid.NewGuid(), Name = "Tanisha", DateOfBirth = DateTime.SpecifyKind(new DateTime(2019,2,14), DateTimeKind.Utc) }
                     }
                 },
                 new Employee
@@ -100,8 +100,8 @@ namespace EmployeeRegistry.Infrastructure.Seed
                     BasicSalary = 62000m,
                     Children = new List<Child>
                     {
-                        new Child { Id = Guid.NewGuid(), Name = "Dihan", DateOfBirth = new DateTime(2016, 11, 3) },
-                        new Child { Id = Guid.NewGuid(), Name = "Disha", DateOfBirth = new DateTime(2019, 7, 19) }
+                        new Child { Id = Guid.NewGuid(), Name = "Dihan", DateOfBirth = DateTime.SpecifyKind(new DateTime(2016,11,3), DateTimeKind.Utc) },
+                        new Child { Id = Guid.NewGuid(), Name = "Disha", DateOfBirth = DateTime.SpecifyKind(new DateTime(2019,7,19), DateTimeKind.Utc) }
                     }
                 },
                 new Employee
@@ -138,7 +138,7 @@ namespace EmployeeRegistry.Infrastructure.Seed
                     BasicSalary = 51000m,
                     Children = new List<Child>
                     {
-                        new Child { Id = Guid.NewGuid(), Name = "Mahir", DateOfBirth = new DateTime(2017, 4, 25) }
+                        new Child { Id = Guid.NewGuid(), Name = "Mahir", DateOfBirth = DateTime.SpecifyKind(new DateTime(2017,4,25), DateTimeKind.Utc) }
                     }
                 },
                 new Employee
