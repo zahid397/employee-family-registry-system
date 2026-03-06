@@ -5,11 +5,13 @@ using EmployeeRegistry.Application.Interfaces;
 using EmployeeRegistry.Application.Validators;
 using EmployeeRegistry.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EmployeeRegistry.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize] // Require role from middleware
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeRepository _repository;
@@ -21,16 +23,18 @@ namespace EmployeeRegistry.API.Controllers
             _pdfService = pdfService;
         }
 
-        // 🔍 Search employees
+        // 🔍 Search employees (Viewer + Admin)
         [HttpGet("search")]
+        [Authorize(Roles = "Viewer,Admin")]
         public async Task<IActionResult> Search([FromQuery] string q)
         {
             var employees = await _repository.SearchAsync(q);
             return Ok(employees);
         }
 
-        // ➕ Create employee
+        // ➕ Create employee (Admin only)
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(CreateEmployeeCommand command)
         {
             var validator = new CreateEmployeeCommandValidator(_repository);
@@ -68,16 +72,18 @@ namespace EmployeeRegistry.API.Controllers
             return Ok(employee.Id);
         }
 
-        // ❌ Delete employee
+        // ❌ Delete employee (Admin only)
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             await _repository.DeleteAsync(id);
             return NoContent();
         }
 
-        // 📄 Single employee PDF
+        // 📄 Single employee PDF (Admin only)
         [HttpGet("{id}/pdf")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetPdf(Guid id)
         {
             var pdfBytes = await _pdfService.GenerateEmployeePdfAsync(id);
@@ -88,8 +94,9 @@ namespace EmployeeRegistry.API.Controllers
             return File(pdfBytes, "application/pdf", $"employee_{id}.pdf");
         }
 
-        // 📊 Employee List PDF (NEW FEATURE)
+        // 📊 Employee List PDF (Admin only)
         [HttpGet("pdf-list")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetPdfList([FromQuery] string q = null)
         {
             var employees = await _repository.SearchAsync(q);
